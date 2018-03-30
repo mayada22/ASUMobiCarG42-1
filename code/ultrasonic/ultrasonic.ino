@@ -1,46 +1,46 @@
-#include <Servo.h>
-Servo servo1;
-int pos1 = 0;
-#define trig 10
-#define echo 8
-#define button 11
-long duration, distance, ClosestTarget, AngleTarget;
-void setup()
-{
-Serial.begin(9600);
-servo1.attach(9);
-pinMode(trig, OUTPUT);
-pinMode(echo, INPUT);
-pinMode(button, INPUT);
+#include "SoftwareSerial.h"// import the serial library\
+
+
+const int trigPin = 13; // Trigger Pin of Ultrasonic Sensor
+const int echoPin = 12; // Echo Pin of Ultrasonic Sensor
+long duration, distanceCm; // define time duration , distance in inches ,and cm
+float minObstacleDistance = 5 ; // min distace of obstacle detection
+
+long microsecondsToCentimeters(long microseconds)
+{return microseconds / 29 / 2;}
+
+
+
+/////SETUP/////////////////////////////////////////////////////////////////////////////////
+void setup() {
+Serial.begin(9600); // Starting Serial Terminal
+pinMode (trigPin , OUTPUT ) ;
+pinMode (echoPin , INPUT ) ; 
 }
-void loop()
-{
-if(digitalRead(button)==HIGH)
-{
-for(pos1 = 0; pos1 < 180; pos1 += 1) { servo1.write(pos1); 
-delay(10); 
-digitalWrite(trig, LOW); 
-delayMicroseconds(2); 
-digitalWrite(trig, HIGH); 
-delayMicroseconds(10); 
-digitalWrite(trig, LOW); 
-duration = pulseIn(echo, HIGH); // Wait for HIGH, timer on, timer ends on LOW distance = duration / 58; if(ClosestTarget>distance)
-{
-ClosestTarget=distance;
-AngleTarget=pos1;
+
+
+void loop() {
+ digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+ duration = pulseIn(echoPin, HIGH);
+ distanceCm = microsecondsToCentimeters(duration);
+
+
+  if ( distanceCm < minObstacleDistance ) 
+  return 1 ; 
+
+  else 
+  return 0 ;
+  
 }
+
+
 }
-for(pos1 = 180; pos1>=1; pos1-=1)
-{
-servo1.write(pos1);
-delay(10);
-}
-Serial.print("Closest Target = " );
-Serial.print(ClosestTarget);
-Serial.println(" ");
-Serial.print("Target Angle = " );
-Serial.print(AngleTarget);
-Serial.println(" ");
-ClosestTarget = 1000;
-}
-}
+
+
+
+
