@@ -1,0 +1,13 @@
+arduino uno +usb cable= 150L.E
+H bridge = 75L.E
+Four Wheel drive one Layer=250L.E
+UltraSonic Sensor HC-SR04=50L.E
+4 Pin Bluetooth Module=100L.E
+5 Lithium Batteries (used)=125L.E
+9V Battery=10L.E
+Cap & blager =9L.E
+BatteryHolder for lithium = 10L.E
+Line Follower Sensor X3=100L.E
+Mini Breadboard=25L.E
+Jumpers=20L.E
+
