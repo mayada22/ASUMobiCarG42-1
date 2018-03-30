@@ -5,12 +5,18 @@ const int EN2=6; // Right back wheel
 const int EN3=10; // Left front wheel
 const int EN4=11; // left back wheel
 
+// inputs  " input 1 and 0 will make the wheel rotate clockwise and vise versa " 
+int Inright1 = 2 ; // input 1 of the right half of the car
+int Inright2 = 3 ; // input 2 of the right half of the car
+int Inleft1 = 7 ; // input 1 of the left half of the car
+int Inleft2 = 8 ; // input 2 of the left half of the car
 
 int BluetoothData; // save data recieved from the bluetooth module
-
  SoftwareSerial HC05 (10,11); // RX, TX
  int  Speed=255;
 
+
+/////SETUP/////////////////////////////////////////////////////////////////////////////////
 void setup() {
 // fIRST , define the Motor's pin as an OUTPUT
 HC05.begin(9600);
@@ -19,7 +25,18 @@ pinMode( EN1 ,OUTPUT);// Right Motor front wire
 pinMode( EN2 ,OUTPUT);// Right Motor back wire
 pinMode( EN3 ,OUTPUT);// left Motor front wire
 pinMode( EN4 ,OUTPUT);// left Motor back wire
+
+pinMode( Inright1 ,OUTPUT);
+pinMode( Inright2 ,OUTPUT);
+pinMode( Inleft1 ,OUTPUT);
+pinMode( Inleft2 ,OUTPUT);
+
+
+Serial.begin(9600); // Starting Serial Terminal
+
 }
+
+
 
 // the two back wheels are hooked up so that they always rotate clockwise "make the car move forwards " when Enable isn't off "0"
 // the two front wheels are hooked up so that they alwats rotate counter clockwise " it makes the car move backwards and helps with the left/right movements " as long as enable isn't off "0"
@@ -30,6 +47,12 @@ void FORWARD(int Speed){
   analogWrite(EN2,Speed); //RB on
   analogWrite(EN3,Speed); // LF off
   analogWrite(EN4,Speed); // LB on
+
+  digitalWrite(Inright1,1);
+  digitalWrite(Inright2,0);
+  digitalWrite(Inleft1,1);
+  digitalWrite(Inleft2,0);
+
 }
 void BACKWARD(int Speed){
   
@@ -37,6 +60,11 @@ void BACKWARD(int Speed){
   analogWrite(EN2,Speed); // RB off 
   analogWrite(EN3,Speed); // LF on 
   analogWrite(EN4,Speed); // LB off 
+
+  digitalWrite(Inright1,0);
+  digitalWrite(Inright2,1);
+  digitalWrite(Inleft1,0);
+  digitalWrite(Inleft2,1);
 }
 void LEFT(int Speed){
   
@@ -44,6 +72,11 @@ void LEFT(int Speed){
   analogWrite(EN2,Speed); // RB on 
   analogWrite(EN3,Speed); // LF on
   analogWrite(EN4,0); // LB off
+
+  digitalWrite(Inright1,1);
+  digitalWrite(Inright2,0);
+  digitalWrite(Inleft1,0);
+  digitalWrite(Inleft2,1);
 }
 void RIGHT(int Speed){
 
@@ -51,6 +84,12 @@ void RIGHT(int Speed){
   analogWrite(EN2,0); // RB off
   analogWrite(EN3,0); // LF off
   analogWrite(EN4,Speed); // LB off
+  
+  digitalWrite(Inright1,0);
+  digitalWrite(Inright2,1);
+  digitalWrite(Inleft1,1);
+  digitalWrite(Inleft2,0);
+  
   }
 
 void Stop(){
@@ -69,21 +108,25 @@ void loop() {
 
 /// FORWARD ///
   if(BluetoothData=='F'){   // if Forward direction pressed .... 
+    
    FORWARD(Speed);
    }
 
 /// BACKWWARD ///
   if(BluetoothData=='B'){   // if Back direction pressed .... 
+
   BACKWARD(Speed);}
 
 
 /// LEFT ///   
   if(BluetoothData=='L'){   // if Left direction pressed .... 
+
   RIGHT(Speed);}
 
 
  /// RIGHT ///
   if(BluetoothData=='R'){   // if Right direction pressed ....
+
     LEFT(Speed);}
    
     
